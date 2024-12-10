@@ -10,7 +10,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   source:
     chart: sysdig-deploy
-    repoURL: 'https://charts.sysdig.com/'
+    repoURL: 'https://github.com/yoshiouchi/argocd-gke.git'
     targetRevision: 1.71.0
     helm:
       valueFiles:
