@@ -9,8 +9,9 @@ spec:
     namespace: sysdig-agent
     server: 'https://kubernetes.default.svc'
   source:
-    repoURL: 'https://github.com/yoshiouchi/argocd-gke'
-    targetRevision: main
+    chart: sysdig-deploy
+    repoURL: 'https://charts.sysdig.com/'
+    targetRevision: 1.71.0
     helm:
       valueFiles:
       - apps/sysdig-deploy/clustershield-values.yaml
