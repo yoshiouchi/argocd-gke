@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sysdig-deploy
+spec:
+  destination:
+    name: ''
+    namespace: sysdig-agent
+    server: 'https://kubernetes.default.svc'
+  ignoreDifferences:
+  - name: sysdig-clustershield
+    kind: Secret
+    jsonPointers:
+    - /data/sysdig-cluster-nats-password
+  - name: sysdig-clustershield-tls-certs
+    kind: Secret
+    jsonPointers:
+    - /data
+  - name: sysdig-deploy-clustershield-audit
+    kind: ValidatingWebhookConfiguration
+    jqPathExpressions:
+    - .webhooks[].clientConfig.caBundle
+  sources:
+  - repoURL: 'https://charts.sysdig.com'
+    chart: sysdig-deploy
+    targetRevision: 1.71.0
+    helm:
+      valueFiles:
+      - apps/sysdig-deploy/values.yaml
+  - repoURL: 'https://github.com/yoshiouchi/argocd-gke.git'
+    targetRevision: main
+    ref: values
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
