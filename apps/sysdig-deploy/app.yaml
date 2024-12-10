@@ -2,11 +2,19 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: sysdig-deploy
+  namespace: argocd
 spec:
+  project: default
   destination:
-    name: ''
     namespace: sysdig-agent
     server: 'https://kubernetes.default.svc'
+  source:
+    repoURL: 'https://charts.sysdig.com'
+    chart: sysdig-deploy
+    targetRevision: 1.71.0
+    helm:
+      valueFiles:
+      - apps/sysdig-deploy/values.yaml
   ignoreDifferences:
   - name: sysdig-clustershield
     kind: Secret
@@ -20,17 +28,7 @@ spec:
     kind: ValidatingWebhookConfiguration
     jqPathExpressions:
     - .webhooks[].clientConfig.caBundle
-  sources:
-  - repoURL: 'https://charts.sysdig.com'
-    chart: sysdig-deploy
-    targetRevision: 1.71.0
-    helm:
-      valueFiles:
-      - apps/sysdig-deploy/values.yaml
-  - repoURL: 'https://github.com/yoshiouchi/argocd-gke.git'
-    targetRevision: main
-    ref: values
-  project: default
   syncPolicy:
+    automated: null
     syncOptions:
       - CreateNamespace=true
