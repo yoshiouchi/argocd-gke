@@ -14,7 +14,7 @@ spec:
     targetRevision: 1.71.0
     helm:
       valueFiles:
-      - apps/sysdig-deploy/values.yaml
+      - apps/sysdig-deploy/clustershield-values.yaml
   ignoreDifferences:
   - name: sysdig-clustershield
     kind: Secret
